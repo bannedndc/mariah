@@ -7,58 +7,53 @@ import { Note, Interval, Distance, Scale, Chord } from "tonal";
 
 class MidiThing extends Component {
   static propTypes = {
-    //eventually scale
+    low: PropTypes.number.isRequired,
+    high: PropTypes.number.isRequired,
   };
 
   state = {
-    note: '60',
-    name: 'C'
+    curr: 60,
+    name: 'C4'
   };
 
-  setNoteName() {
-    this.setState({ name : Note.fromMidi(this.state.note) })
+  setCurrName() {
+    this.setState({ name : Note.fromMidi(this.state.curr) })
   }
 
   handleInc = e => {
-    this.setState({ note : parseInt(this.state.note) + 1 + "" });
-    this.setNoteName();
+    this.setState({ curr : parseInt(this.state.curr) + 1 + "" });
+    this.setCurrName();
   };
 
   handleDec = e => {
-    this.setState({ note : parseInt(this.state.note) - 1 + "" });
-    this.setNoteName();
+    this.setState({ curr : parseInt(this.state.curr) - 1 + "" });
+    this.setCurrName();
   };
 
   playTestInstrument() {
-    this.midiSounds.playChordNow(3, [this.state.note], 2.5);
+    this.midiSounds.playChordNow(3, [this.state.curr], 2.5);
   }
 
   render() {
     return (
+      <div className="midithing level">
 
-      <div className="tile is-ancestor">
-	<div className="tile is-vertical is-12">
-	  <div className="tile">
-	    <div className="tile is-parent">
-	      <article className="tile is-child notification is-black level">
-		<div className="midithing level">
-		  <p><button onClick={this.handleDec.bind(this)} className="button is-large">down</button></p>
+	<p><button onClick={this.handleDec.bind(this)} className="button is-large">down</button></p>
 
-		  <p><button onClick={this.playTestInstrument.bind(this)} className="button is-large">{this.state.name}</button></p>
+	<p><button onClick={this.playTestInstrument.bind(this)} className="button is-large">{this.state.name}</button></p>
 
-		  <p><button onClick={this.handleInc.bind(this)} className="button is-large">up</button></p>
-		  
-		  <MIDISounds ref={(ref) => (this.midiSounds = ref)} appElementName="app" instruments={[3]} />	
+	<p><button onClick={this.handleInc.bind(this)} className="button is-large">up</button></p>
+	
+	<MIDISounds ref={(ref) => (this.midiSounds = ref)} appElementName="app" instruments={[3]} />	
 
-		</div>
-
-	      </article>
-	    </div>
-	  </div>
-	</div>
       </div>
-
     );
   }
 }
+
+MidiThing.defaultProps = {
+  low: 60,
+  high: 65
+};
+
 export default MidiThing;
